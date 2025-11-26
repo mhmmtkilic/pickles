@@ -5,18 +5,20 @@ import { Button, Input, Card, CardHeader, CardTitle, CardContent } from "@/compo
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-zinc-950">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100 px-4 dark:from-zinc-950 dark:to-zinc-900">
       <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center text-2xl">Giriş Yap</CardTitle>
+        <CardHeader className="text-center">
+          <span className="text-4xl">📚</span>
+          <CardTitle className="text-2xl">Konya Genç WikiSözlük</CardTitle>
+          <p className="text-sm text-zinc-500">Giriş Yap</p>
         </CardHeader>
         <CardContent>
           <form className="space-y-4">
             <Input
-              id="email"
-              type="email"
-              label="E-posta"
-              placeholder="ornek@email.com"
+              id="kulturKartId"
+              type="text"
+              label="Genç Kültür Kart ID"
+              placeholder="GK-XXXXXX"
             />
             <Input
               id="password"
@@ -29,11 +31,8 @@ export default function LoginPage() {
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-zinc-600 dark:text-zinc-400">
-            Hesabınız yok mu?{" "}
-            <Link
-              href="/register"
-              className="font-medium text-zinc-900 hover:underline dark:text-white"
-            >
+            Hesabın yok mu?{" "}
+            <Link href="/register" className="font-medium text-amber-600 hover:underline dark:text-amber-400">
               Kayıt Ol
             </Link>
           </p>
@@ -42,4 +41,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

@@ -1,79 +1,146 @@
 "use client";
 
-import Image from "next/image";
-import { Button, Card, CardContent } from "@/components";
+import { Avatar, Button, Card, CardHeader, CardTitle, CardContent, Tabs } from "@/components/ui";
+import { CoinBalance } from "@/components/coin";
+import { RoleBadge, RoleProgress } from "@/components/role";
+import { ROLES } from "@/constants";
+import { UserRole } from "@/types";
+
+// Örnek kullanıcı verisi
+const mockUser = {
+  id: "1",
+  username: "gezgin_ali",
+  email: "ali@selcuk.edu.tr",
+  role: "gezgin" as UserRole,
+  gencCoin: 4750,
+  kulturKartId: "GK-123456",
+  badges: [
+    { id: "1", name: "İlk Yorum", icon: "💬" },
+    { id: "2", name: "Wiki Editörü", icon: "📝" },
+    { id: "3", name: "100 Beğeni", icon: "👍" },
+  ],
+  contributions: {
+    topics: 5,
+    wikiEdits: 23,
+    entries: 67,
+  },
+};
 
 export default function ProfilePage() {
-  return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      {/* Profil Header */}
-      <div className="mb-8 flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-        <div className="relative h-32 w-32 overflow-hidden rounded-full bg-gradient-to-br from-amber-400 to-orange-500">
-          <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-white">
-            JD
-          </div>
-        </div>
-        <div className="flex-1 text-center sm:text-left">
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
-            John Doe
-          </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">@johndoe</p>
-          <p className="mt-2 max-w-md text-zinc-700 dark:text-zinc-300">
-            Frontend Developer | React & Next.js | Açık kaynak tutkunu 🚀
-          </p>
-          <div className="mt-4 flex justify-center gap-6 sm:justify-start">
-            <div className="text-center">
-              <p className="text-xl font-bold text-zinc-900 dark:text-white">128</p>
-              <p className="text-sm text-zinc-500">Gönderi</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-bold text-zinc-900 dark:text-white">1.2K</p>
-              <p className="text-sm text-zinc-500">Takipçi</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-bold text-zinc-900 dark:text-white">350</p>
-              <p className="text-sm text-zinc-500">Takip</p>
-            </div>
-          </div>
-          <div className="mt-4 flex justify-center gap-3 sm:justify-start">
-            <Button variant="primary" size="sm">Profili Düzenle</Button>
-            <Button variant="outline" size="sm">Paylaş</Button>
-          </div>
-        </div>
-      </div>
+  const roleInfo = ROLES[mockUser.role];
 
-      {/* Gönderiler Grid */}
-      <div className="border-t border-zinc-200 pt-6 dark:border-zinc-800">
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-white">
-          Gönderiler
-        </h2>
-        <div className="grid grid-cols-3 gap-1 sm:gap-3">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-            <div
-              key={item}
-              className="aspect-square cursor-pointer overflow-hidden rounded-lg bg-zinc-200 transition-opacity hover:opacity-80 dark:bg-zinc-800"
-            >
-              <div className="flex h-full w-full items-center justify-center text-zinc-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-            </div>
+  const tabContent = [
+    {
+      id: "contributions",
+      label: "Katkılarım",
+      content: (
+        <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Card>
+              <CardContent className="pt-4 text-center">
+                <p className="text-3xl font-bold text-zinc-900 dark:text-white">
+                  {mockUser.contributions.topics}
+                </p>
+                <p className="text-sm text-zinc-500">Açılan Başlık</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-4 text-center">
+                <p className="text-3xl font-bold text-zinc-900 dark:text-white">
+                  {mockUser.contributions.wikiEdits}
+                </p>
+                <p className="text-sm text-zinc-500">Wiki Düzenlemesi</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-4 text-center">
+                <p className="text-3xl font-bold text-zinc-900 dark:text-white">
+                  {mockUser.contributions.entries}
+                </p>
+                <p className="text-sm text-zinc-500">Yorum</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "badges",
+      label: "Rozetlerim",
+      content: (
+        <div className="grid gap-4 sm:grid-cols-3">
+          {mockUser.badges.map((badge) => (
+            <Card key={badge.id}>
+              <CardContent className="flex items-center gap-3 pt-4">
+                <span className="text-3xl">{badge.icon}</span>
+                <span className="font-medium text-zinc-900 dark:text-white">
+                  {badge.name}
+                </span>
+              </CardContent>
+            </Card>
           ))}
         </div>
-      </div>
+      ),
+    },
+    {
+      id: "history",
+      label: "Coin Geçmişi",
+      content: (
+        <div className="text-center text-zinc-500 py-8">
+          Coin geçmişi yakında...
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-8">
+      {/* Profile Header */}
+      <Card className="mb-8">
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+            <Avatar
+              fallback={mockUser.username.slice(0, 2).toUpperCase()}
+              roleColor={roleInfo.color}
+              size="xl"
+            />
+            <div className="flex-1 text-center sm:text-left">
+              <div className="flex flex-col items-center gap-2 sm:flex-row">
+                <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
+                  @{mockUser.username}
+                </h1>
+                <RoleBadge role={mockUser.role} />
+              </div>
+              <p className="mt-1 text-sm text-zinc-500">
+                Kültür Kart: {mockUser.kulturKartId}
+              </p>
+              
+              {/* Coin Balance */}
+              <div className="mt-4">
+                <CoinBalance amount={mockUser.gencCoin} size="lg" />
+              </div>
+
+              {/* Role Progress */}
+              <div className="mt-4">
+                <RoleProgress currentCoin={mockUser.gencCoin} currentRole={mockUser.role} />
+              </div>
+
+              {/* Actions */}
+              <div className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
+                <Button variant="primary">
+                  🪙 Coin'leri Karta Aktar
+                </Button>
+                <Button variant="outline">
+                  Profili Düzenle
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Tabs */}
+      <Tabs tabs={tabContent} />
     </div>
   );
 }
-
