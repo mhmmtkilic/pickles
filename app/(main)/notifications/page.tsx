@@ -1,76 +1,24 @@
 "use client";
 
-import { Card, CardHeader, CardTitle, CardContent, Button } from "@/components/ui";
-import { NotificationItem } from "@/components/notification";
-import { Notification } from "@/types";
-
-const mockNotifications: Notification[] = [
-  {
-    id: "1",
-    userId: "1",
-    type: "coin_earned",
-    title: "+10 GençCoin Kazandın!",
-    message: "Wiki düzenlemen onaylandı.",
-    isRead: false,
-    link: "/topic/selcuk-hukuk",
-    createdAt: new Date(),
-  },
-  {
-    id: "2",
-    userId: "1",
-    type: "entry_liked",
-    title: "Yorumun Beğenildi",
-    message: "@seyyah_zeynep yorumunu beğendi.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 3600000),
-  },
-  {
-    id: "3",
-    userId: "1",
-    type: "role_upgrade",
-    title: "Tebrikler! 🎉",
-    message: "Seyyah rolüne terfi ettin!",
-    isRead: true,
-    createdAt: new Date(Date.now() - 86400000),
-  },
-  {
-    id: "4",
-    userId: "1",
-    type: "badge_earned",
-    title: "Yeni Rozet Kazandın! 🏆",
-    message: "'100 Beğeni' rozetini kazandın.",
-    isRead: true,
-    createdAt: new Date(Date.now() - 172800000),
-  },
+const notifications = [
+  { id: 1, type: "like", message: "Ayşe Yılmaz gönderinizi beğendi", time: "2 dk önce" },
+  { id: 2, type: "comment", message: "Mehmet Kaya gönderinize yorum yaptı", time: "15 dk önce" },
+  { id: 3, type: "follow", message: "Zeynep Demir sizi takip etmeye başladı", time: "1 saat önce" },
+  { id: 4, type: "coin", message: "50 GençCoin kazandınız!", time: "2 saat önce" },
 ];
 
 export default function NotificationsPage() {
-  const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
-
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
-          Bildirimler
-          {unreadCount > 0 && (
-            <span className="ml-2 rounded-full bg-amber-500 px-2 py-0.5 text-sm text-white">
-              {unreadCount}
-            </span>
-          )}
-        </h1>
-        <Button variant="ghost" size="sm">
-          Tümünü Okundu İşaretle
-        </Button>
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Bildirimler</h1>
+      <div className="bg-white rounded-lg shadow divide-y">
+        {notifications.map((notification) => (
+          <div key={notification.id} className="p-4 hover:bg-gray-50">
+            <p className="font-medium">{notification.message}</p>
+            <p className="text-sm text-gray-500 mt-1">{notification.time}</p>
+          </div>
+        ))}
       </div>
-
-      <Card>
-        <CardContent className="divide-y divide-zinc-100 p-0 dark:divide-zinc-800">
-          {mockNotifications.map((notification) => (
-            <NotificationItem key={notification.id} notification={notification} />
-          ))}
-        </CardContent>
-      </Card>
     </div>
   );
 }
-

@@ -1,43 +1,41 @@
-"use client";
-
 import Link from "next/link";
-import { Button, Input, Card, CardHeader, CardTitle, CardContent } from "@/components";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100 px-4 dark:from-zinc-950 dark:to-zinc-900">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <span className="text-4xl">📚</span>
-          <CardTitle className="text-2xl">Konya Genç WikiSözlük</CardTitle>
-          <p className="text-sm text-zinc-500">Giriş Yap</p>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-4">
-            <Input
-              id="kulturKartId"
-              type="text"
-              label="Genç Kültür Kart ID"
-              placeholder="GK-XXXXXX"
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center mb-6">Giriş Yap</h1>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">E-posta</label>
+            <input
+              type="email"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="ornek@email.com"
             />
-            <Input
-              id="password"
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Şifre</label>
+            <input
               type="password"
-              label="Şifre"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="••••••••"
             />
-            <Button type="submit" className="w-full">
-              Giriş Yap
-            </Button>
-          </form>
-          <p className="mt-4 text-center text-sm text-zinc-600 dark:text-zinc-400">
-            Hesabın yok mu?{" "}
-            <Link href="/register" className="font-medium text-amber-600 hover:underline dark:text-amber-400">
-              Kayıt Ol
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Giriş Yap
+          </button>
+        </form>
+        <p className="text-center mt-4 text-sm text-gray-600">
+          Hesabın yok mu?{" "}
+          <Link href="/register" className="text-purple-600 hover:underline">
+            Kayıt Ol
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

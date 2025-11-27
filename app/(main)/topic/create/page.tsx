@@ -1,84 +1,56 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Card, CardHeader, CardTitle, CardContent } from "@/components/ui";
-import { CATEGORIES } from "@/constants";
-import { TopicCategory } from "@/types";
 
 export default function CreateTopicPage() {
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState<TopicCategory>("akademik");
-  const [wikiContent, setWikiContent] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: API çağrısı
-    console.log({ title, category, wikiContent });
-  };
+  const [category, setCategory] = useState("");
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-white">
-        Yeni Başlık Oluştur
-      </h1>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Başlık Bilgileri</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <Input
-              id="title"
-              label="Başlık"
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Yeni Konu Oluştur</h1>
+      <div className="bg-white p-6 rounded-lg shadow">
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Başlık</label>
+            <input
+              type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Örn: Selçuk Hukuk Final Notları 2024"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Konu başlığı..."
             />
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Kategori
-              </label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value as TopicCategory)}
-                className="h-10 rounded-lg border border-zinc-300 bg-white px-3 text-zinc-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
-              >
-                {Object.entries(CATEGORIES).map(([key, info]) => (
-                  <option key={key} value={key}>
-                    {info.icon} {info.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Bilgi Alanı (Wiki) İçeriği
-              </label>
-              <textarea
-                value={wikiContent}
-                onChange={(e) => setWikiContent(e.target.value)}
-                rows={10}
-                placeholder="Objektif bilgileri buraya yazın. Markdown desteklenir."
-                className="w-full rounded-lg border border-zinc-300 bg-white p-3 text-zinc-900 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
-              />
-              <p className="text-xs text-zinc-500">
-                Markdown formatını kullanabilirsiniz. **kalın**, *italik*, ## başlık
-              </p>
-            </div>
-
-            <div className="flex items-center justify-between border-t border-zinc-200 pt-4 dark:border-zinc-700">
-              <span className="text-sm text-amber-600">
-                🪙 Başlık oluşturarak +20 GençCoin kazanırsın!
-              </span>
-              <Button type="submit">Başlığı Oluştur</Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Kategori</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">Kategori seçin</option>
+              <option value="akademik">Akademik</option>
+              <option value="is-ilanlari">İş İlanları</option>
+              <option value="mekanlar">Mekanlar</option>
+              <option value="etkinlikler">Etkinlikler</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">İlk Entry</label>
+            <textarea
+              rows={6}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Konuyla ilgili ilk entry'nizi yazın..."
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Konu Oluştur
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
-

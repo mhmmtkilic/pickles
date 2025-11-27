@@ -1,79 +1,55 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Card, CardHeader, CardTitle, CardContent, Input } from "@/components/ui";
 
 export default function ReferralPage() {
   const [copied, setCopied] = useState(false);
-  const referralCode = "GEZGIN-ALI-2024";
-  const referralLink = `https://konyagenc.wiki/kayit?ref=${referralCode}`;
+  const referralCode = "GENC2024XYZ";
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(referralLink);
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(referralCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-white">
-        Arkadaşını Davet Et
-      </h1>
-
-      <Card className="mb-6">
-        <CardContent className="pt-6 text-center">
-          <span className="text-6xl">🎁</span>
-          <h2 className="mt-4 text-xl font-semibold text-zinc-900 dark:text-white">
-            İkiniz de 100 GençCoin Kazanın!
-          </h2>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            Arkadaşın senin davet linkinle kayıt olduğunda, ikiniz de 100 GençCoin kazanırsınız.
-          </p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Davet Linkin</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Arkadaşını Davet Et</h1>
+      <div className="bg-white p-6 rounded-lg shadow">
+        <p className="text-gray-600 mb-6">
+          Arkadaşlarını davet et, her başarılı davet için 100 GençCoin kazan!
+        </p>
+        
+        <div className="mb-6">
+          <label className="block text-sm font-medium mb-2">Davet Kodun</label>
           <div className="flex gap-2">
-            <Input
-              id="referral"
-              value={referralLink}
+            <input
+              type="text"
+              value={referralCode}
               readOnly
-              className="flex-1"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
             />
-            <Button onClick={handleCopy}>
-              {copied ? "✓ Kopyalandı" : "Kopyala"}
-            </Button>
+            <button
+              onClick={copyToClipboard}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              {copied ? "Kopyalandı!" : "Kopyala"}
+            </button>
           </div>
+        </div>
 
-          <div className="text-center">
-            <p className="text-sm text-zinc-500">veya kodu paylaş</p>
-            <p className="mt-2 rounded-lg bg-zinc-100 py-2 font-mono text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-white">
-              {referralCode}
-            </p>
+        <div className="p-4 bg-yellow-50 rounded-lg">
+          <h3 className="font-semibold mb-2">Kazanımların</h3>
+          <div className="flex justify-between text-sm">
+            <span>Toplam Davet:</span>
+            <span className="font-semibold">12</span>
           </div>
-
-          <div className="border-t border-zinc-200 pt-4 dark:border-zinc-700">
-            <h3 className="font-medium text-zinc-900 dark:text-white">
-              Davet İstatistiklerin
-            </h3>
-            <div className="mt-3 grid grid-cols-2 gap-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-zinc-900 dark:text-white">12</p>
-                <p className="text-sm text-zinc-500">Davet Edilen</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-amber-600">1,200</p>
-                <p className="text-sm text-zinc-500">Kazanılan Coin</p>
-              </div>
-            </div>
+          <div className="flex justify-between text-sm mt-1">
+            <span>Kazanılan Coin:</span>
+            <span className="font-semibold text-yellow-600">1,200 GençCoin</span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
-

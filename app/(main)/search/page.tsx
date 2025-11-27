@@ -1,67 +1,43 @@
 "use client";
 
 import { useState } from "react";
-import { SearchInput, Badge } from "@/components/ui";
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
-
-  const handleSearch = (q: string) => {
-    setQuery(q);
-    // TODO: API çağrısı
-  };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-white">
-        Arama
-      </h1>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Ara</h1>
+      
+      <div className="mb-6">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Kullanıcı, konu veya mekan ara..."
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+      </div>
 
-      <SearchInput onSearch={handleSearch} className="mb-8" />
+      <div className="flex gap-2 mb-6">
+        {["Tümü", "Kullanıcılar", "Konular", "Mekanlar"].map((filter) => (
+          <button
+            key={filter}
+            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
 
-      {/* Popular Searches */}
-      {!query && (
-        <div>
-          <h2 className="mb-3 text-sm font-medium text-zinc-500">
-            Popüler Aramalar
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {["Final notları", "Kiralık ev", "Staj", "Yemekhane", "Kütüphane", "Part-time iş"].map((term) => (
-              <button
-                key={term}
-                onClick={() => handleSearch(term)}
-                className="rounded-full bg-zinc-100 px-3 py-1.5 text-sm text-zinc-700 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-              >
-                {term}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Search Results */}
       {query && (
-        <div>
-          <p className="mb-4 text-sm text-zinc-500">
-            "{query}" için sonuçlar gösteriliyor
-          </p>
-          
-          {results.length === 0 ? (
-            <div className="py-12 text-center">
-              <p className="text-zinc-500">Sonuç bulunamadı</p>
-              <p className="mt-2 text-sm text-zinc-400">
-                Farklı anahtar kelimeler deneyin
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {/* Sonuçlar buraya gelecek */}
-            </div>
-          )}
+        <div className="bg-white rounded-lg shadow divide-y">
+          <div className="p-4 hover:bg-gray-50">
+            <p className="font-medium">"{query}" için sonuç bulunamadı</p>
+            <p className="text-sm text-gray-500 mt-1">Farklı anahtar kelimeler deneyin</p>
+          </div>
         </div>
       )}
     </div>
   );
 }
-
