@@ -167,3 +167,32 @@ export interface RegisterFormData {
 
 // Genel tipler
 export type Status = "idle" | "loading" | "success" | "error";
+
+// Feed tipleri
+export type FeedItemType = "post" | "wiki" | "job" | "academic";
+export type JobType = "ozel_ders" | "ev_arkadasi" | "part_time" | "staj";
+export type FileType = "pdf" | "zip" | "doc" | "ppt";
+
+export interface FeedItem {
+  id: string;
+  type: FeedItemType;
+  createdAt: Date;
+}
+
+// Etkinlik tipleri
+export interface Event {
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+}
+
+// Liderlik tablosu
+export interface LeaderboardUser {
+  rank: number;
+  name: string;
+  username: string;
+  role: UserRole;
+  avatar?: string;
+  coins: number;
+}

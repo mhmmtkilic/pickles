@@ -1,0 +1,162 @@
+import { MapPin, DollarSign, Calendar, Bookmark, Share2, Briefcase, Home, BookOpen } from 'lucide-react';
+import { useState } from 'react';
+
+interface JobCardProps {
+  id: number;
+  author: {
+    name: string;
+    username: string;
+    avatar: string;
+    badge?: {
+      text: string;
+      color: string;
+    };
+  };
+  category: 'job' | 'roommate' | 'tutor';
+  title: string;
+  details: {
+    location: string;
+    payment: string;
+    time: string;
+  };
+  description: string;
+  timestamp: string;
+}
+
+export function JobCard({
+  author,
+  category,
+  title,
+  details,
+  description,
+  timestamp,
+}: JobCardProps) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const getCategoryConfig = () => {
+    switch (category) {
+      case 'job':
+        return {
+          icon: <Briefcase className="w-4 h-4" />,
+          label: 'İş İlanı',
+          color: 'bg-blue-50 text-blue-700 border-blue-200',
+          buttonText: 'Başvur',
+        };
+      case 'roommate':
+        return {
+          icon: <Home className="w-4 h-4" />,
+          label: 'Ev Arkadaşı',
+          color: 'bg-green-50 text-green-700 border-green-200',
+          buttonText: 'İletişime Geç',
+        };
+      case 'tutor':
+        return {
+          icon: <BookOpen className="w-4 h-4" />,
+          label: 'Özel Ders',
+          color: 'bg-purple-50 text-purple-700 border-purple-200',
+          buttonText: 'İletişime Geç',
+        };
+    }
+  };
+
+  const config = getCategoryConfig();
+
+  const getBadgeColor = (color: string) => {
+    const colors: Record<string, string> = {
+      blue: 'bg-blue-100 text-blue-700',
+      orange: 'bg-orange-100 text-orange-700',
+      purple: 'bg-purple-100 text-purple-700',
+    };
+    return colors[color] || 'bg-gray-100 text-gray-700';
+  };
+
+  return (
+    <div className="bg-white border border-border rounded-lg mb-4 hover:border-muted transition-colors overflow-hidden">
+      <div className="p-5">
+        {/* Header: User Info + Actions */}
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <img 
+              src={author.avatar} 
+              alt={author.name}
+              className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-100"
+            />
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h4 className="leading-tight">{author.name}</h4>
+                {author.badge && (
+                  <span className={`px-2 py-0.5 rounded-full text-xs ${getBadgeColor(author.badge.color)}`}>
+                    {author.badge.text}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">@{author.username} · {timestamp}</p>
+            </div>
+          </div>
+
+          {/* Right Actions: Bookmark & Share */}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setIsBookmarked(!isBookmarked)}
+              className={`p-2 rounded-md transition-all ${
+                isBookmarked 
+                  ? 'text-accent bg-violet-50' 
+                  : 'text-gray-400 hover:text-accent hover:bg-secondary'
+              }`}
+              title="Kaydet"
+            >
+              <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-accent' : ''}`} />
+            </button>
+            <button 
+              className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-secondary transition-all"
+              title="Paylaş"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Job Title */}
+        <h3 className="text-lg mb-3">{title}</h3>
+
+        {/* Details Grid */}
+        <div className="grid grid-cols-1 gap-2 mb-3 bg-secondary rounded-lg p-3">
+          {/* Category Badge */}
+          <div className="flex items-center gap-2 text-sm pb-2 border-b border-border/30">
+            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs ${config.color}`}>
+              {config.icon}
+              <span>{config.label}</span>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2 text-sm">
+            <MapPin className="w-4 h-4 text-muted-foreground" />
+            <span className="text-muted-foreground">Konum:</span>
+            <span>{details.location}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <DollarSign className="w-4 h-4 text-muted-foreground" />
+            <span className="text-muted-foreground">Ücret:</span>
+            <span className="text-accent">{details.payment}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Calendar className="w-4 h-4 text-muted-foreground" />
+            <span className="text-muted-foreground">Zaman:</span>
+            <span>{details.time}</span>
+          </div>
+        </div>
+
+        <p className="text-sm text-gray-800 leading-relaxed mb-4">
+          {description}
+        </p>
+
+        {/* Interaction Bar */}
+        <div className="pt-3 border-t border-border/50">
+          <button className="px-6 py-2 bg-accent hover:bg-accent/90 text-white rounded-lg transition-colors text-sm">
+            {config.buttonText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
