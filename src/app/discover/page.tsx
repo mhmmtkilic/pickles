@@ -1,18 +1,18 @@
 "use client";
 
-import { Navigation } from './components/Navigation';
-import { Header } from './components/Header';
-import { PostCreator } from './components/PostCreator';
-import { PostCard } from './components/PostCard';
-import { WikiCard } from './components/WikiCard';
-import { JobCard } from './components/JobCard';
-import { AcademicCard } from './components/AcademicCard';
-import { Sidebar } from './components/Sidebar';
-import { VenueSidebar } from './components/VenueSidebar';
-import { VenueFilters } from './components/VenueFilters';
-import { CreatePostModal } from './components/CreatePostModal';
-import { VenueDetail } from './components/VenueDetail';
-import { VenueList } from './components/VenueList';
+import { Navigation } from '@/components/Navigation';
+import { Header } from '@/components/Header';
+import { PostCreator } from '@/components/PostCreator';
+import { PostCard } from '@/components/PostCard';
+import { WikiCard } from '@/components/WikiCard';
+import { JobCard } from '@/components/JobCard';
+import { AcademicCard } from '@/components/AcademicCard';
+import { Sidebar } from '@/components/Sidebar';
+import { VenueSidebar } from '@/components/VenueSidebar';
+import { VenueFilters } from '@/components/VenueFilters';
+import { CreatePostModal } from '@/components/CreatePostModal';
+import { VenueDetail } from '@/components/VenueDetail';
+import { VenueList } from '@/components/VenueList';
 import { useState } from 'react';
 
 const mockPosts = [
