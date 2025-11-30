@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, MessageCircle, Share2, Bookmark, MoreHorizontal, MapPin, BookOpen } from 'lucide-react';
+import { ArrowUp, ArrowDown, MessageCircle, Share2, Bookmark, MoreHorizontal, MapPin, BookOpen, Heart } from 'lucide-react';
 import { useState } from 'react';
 
 interface WikiCardProps {
@@ -38,6 +38,7 @@ export function WikiCard({
 }: WikiCardProps) {
   const [voteState, setVoteState] = useState<'up' | 'down' | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [showFullContent, setShowFullContent] = useState(false);
 
   const displayContent = content.length > 200 && !showFullContent 
@@ -55,42 +56,7 @@ export function WikiCard({
 
   return (
     <div className="bg-white border border-border rounded-lg mb-4 hover:border-muted transition-colors overflow-hidden">
-      <div className="flex gap-4 p-5">
-        {/* Vote Buttons - Left Column */}
-        <div className="flex flex-col items-center gap-1 pt-1 p-[0px]">
-          <button
-            onClick={() => setVoteState(voteState === 'up' ? null : 'up')}
-            className={`p-2 rounded-md transition-all ${
-              voteState === 'up' 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
-            }`}
-          >
-            <ArrowUp className={`w-4 h-4 transition-all ${
-              voteState === 'up' ? 'fill-green-600' : ''
-            }`} />
-          </button>
-          <span className={`text-sm font-medium min-w-[2rem] text-center ${
-            voteState === 'up' ? 'text-green-600' : voteState === 'down' ? 'text-red-600' : 'text-gray-700'
-          }`}>
-            {upvotes - downvotes + (voteState === 'up' ? 1 : voteState === 'down' ? -1 : 0)}
-          </span>
-          <button
-            onClick={() => setVoteState(voteState === 'down' ? null : 'down')}
-            className={`p-2 rounded-md transition-all ${
-              voteState === 'down' 
-                ? 'text-red-600 bg-red-50' 
-                : 'text-gray-400 hover:text-red-600 hover:bg-red-50'
-            }`}
-          >
-            <ArrowDown className={`w-4 h-4 transition-all ${
-              voteState === 'down' ? 'fill-red-600' : ''
-            }`} />
-          </button>
-        </div>
-
-        {/* Main Content Area */}
-        <div className="flex-1 min-w-0">
+      <div className="p-5">
           {/* Header: User Info + Actions */}
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
@@ -127,9 +93,9 @@ export function WikiCard({
               </button>
               <button 
                 className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-secondary transition-all"
-                title="Daha fazla"
+                title="Paylaş"
               >
-                <MoreHorizontal className="w-4 h-4" />
+                <Share2 className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -183,18 +149,57 @@ export function WikiCard({
           )}
 
           {/* Interaction Bar */}
-          <div className="flex items-center gap-6 pt-3 border-t border-border/50">
+          <div className="flex items-center gap-4 pt-3 border-t border-border/50">
+            {/* Upvote/Downvote */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setVoteState(voteState === 'up' ? null : 'up')}
+                className={`p-1.5 rounded-md transition-all ${
+                  voteState === 'up' 
+                    ? 'text-green-600 bg-green-50' 
+                    : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
+                }`}
+              >
+                <ArrowUp className={`w-4 h-4 transition-all ${
+                  voteState === 'up' ? 'fill-green-600' : ''
+                }`} />
+              </button>
+              <span className={`text-sm font-medium min-w-[1.5rem] text-center ${
+                voteState === 'up' ? 'text-green-600' : voteState === 'down' ? 'text-red-600' : 'text-gray-700'
+              }`}>
+                {upvotes - downvotes + (voteState === 'up' ? 1 : voteState === 'down' ? -1 : 0)}
+              </span>
+              <button
+                onClick={() => setVoteState(voteState === 'down' ? null : 'down')}
+                className={`p-1.5 rounded-md transition-all ${
+                  voteState === 'down' 
+                    ? 'text-red-600 bg-red-50' 
+                    : 'text-gray-400 hover:text-red-600 hover:bg-red-50'
+                }`}
+              >
+                <ArrowDown className={`w-4 h-4 transition-all ${
+                  voteState === 'down' ? 'fill-red-600' : ''
+                }`} />
+              </button>
+            </div>
+
+            <button 
+              onClick={() => setIsLiked(!isLiked)}
+              className={`flex items-center gap-2 transition-all ${
+                isLiked ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
+              }`}
+            >
+              <Heart className={`w-4 h-4 ${isLiked ? 'fill-red-500' : ''}`} />
+              <span className="text-sm">{isLiked ? 43 : 42}</span>
+            </button>
+
             <button className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-all">
               <MessageCircle className="w-4 h-4" />
               <span className="text-sm">{comments}</span>
             </button>
 
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-all">
-              <Share2 className="w-4 h-4" />
-              <span className="text-sm">Paylaş</span>
-            </button>
+            <div className="flex-1"></div>
           </div>
-        </div>
       </div>
     </div>
   );

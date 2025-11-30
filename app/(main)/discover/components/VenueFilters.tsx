@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Wifi, Zap, Cigarette, TreePine, ChevronDown } from 'lucide-react';
+import { Wifi, Zap, Cigarette, TreePine, ChevronDown, MapPin, Coffee, Sparkles } from 'lucide-react';
 
-type SortOption = 'rating' | 'newest' | 'nearest';
+type SortOption = 'all' | 'rating' | 'newest' | 'nearest';
 
 interface VenueFiltersProps {
   sortBy?: SortOption;
   onSortChange?: (sort: SortOption) => void;
 }
 
-export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersProps) {
+export function VenueFilters({ sortBy = 'all', onSortChange }: VenueFiltersProps) {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     location: false,
     type: false,
@@ -21,37 +21,6 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
 
   return (
     <aside className="space-y-4 sticky top-20 max-w-[320px] w-full">
-      {/* Sıralama Bölümü */}
-      <div className="bg-white border border-border rounded-lg p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h3>Sırala</h3>
-          <button 
-            onClick={() => onSortChange?.('rating')}
-            className="text-xs px-2.5 py-1 rounded-md text-muted-foreground hover:text-accent hover:bg-violet-50 transition-all"
-          >
-            Temizle
-          </button>
-        </div>
-        <div className="space-y-2.5">
-          {[
-            { value: 'rating' as SortOption, label: 'Puana Göre' },
-            { value: 'newest' as SortOption, label: 'En Yeni' },
-            { value: 'nearest' as SortOption, label: 'En Yakın' }
-          ].map((option) => (
-            <label key={option.value} className="flex items-center gap-2.5 cursor-pointer group py-0.5">
-              <input
-                type="radio"
-                name="sort"
-                checked={sortBy === option.value}
-                onChange={() => onSortChange?.(option.value)}
-                className="w-4 h-4 rounded-full border-2 border-gray-300 bg-transparent appearance-none cursor-pointer transition-all checked:border-accent checked:bg-accent focus:ring-2 focus:ring-accent/20 focus:ring-offset-0 checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMyIgZmlsbD0id2hpdGUiLz48L3N2Zz4=')] checked:bg-center checked:bg-no-repeat"
-              />
-              <span className="text-sm group-hover:text-accent transition-colors select-none">{option.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       {/* Filtreleme Bölümü */}
       <div className="bg-white border border-border rounded-lg p-5">
         {/* Header */}
@@ -64,7 +33,10 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
 
         {/* Özel Rozetler - Always Visible, Top Position */}
         <div className="mb-5">
-          <h4 className="mb-3 text-sm text-muted-foreground uppercase tracking-wide">Özel Rozetler</h4>
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 text-muted-foreground" />
+            <h4 className="text-sm text-muted-foreground uppercase tracking-wide">Özel Rozetler</h4>
+          </div>
           <div className="space-y-3">
             {[
               { label: 'Öğrenci Dostu (Ekonomik)', emoji: '💸' },
@@ -78,7 +50,7 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
                 </span>
                 <div className="relative inline-block w-10 h-5">
                   <input type="checkbox" className="sr-only peer" />
-                  <div className="w-10 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-accent/20 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all after:shadow-sm peer-checked:bg-accent"></div>
+                  <div className="w-10 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-[#7c3aed]/20 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all after:shadow-sm peer-checked:bg-[#7c3aed]"></div>
                 </div>
               </label>
             ))}
@@ -91,9 +63,12 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
             onClick={() => toggleSection('location')}
             className="w-full flex items-center justify-between mb-3 group"
           >
-            <h4 className="text-sm text-muted-foreground uppercase tracking-wide group-hover:text-accent transition-colors">
-              Lokasyon
-            </h4>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors" />
+              <h4 className="text-sm text-muted-foreground uppercase tracking-wide group-hover:text-accent transition-colors">
+                Lokasyon
+              </h4>
+            </div>
             <ChevronDown 
               className={`w-4 h-4 text-muted-foreground group-hover:text-accent transition-all ${
                 openSections.location ? 'rotate-180' : ''
@@ -112,7 +87,7 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
                 <label key={location} className="flex items-center gap-2.5 cursor-pointer group py-0.5">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 rounded-md border-2 border-gray-300 bg-transparent appearance-none cursor-pointer transition-all checked:border-accent checked:bg-accent focus:ring-2 focus:ring-accent/20 focus:ring-offset-0 checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMuMzMzMyA0TDYgMTEuMzMzM0wyLjY2NjY3IDgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+')] checked:bg-center checked:bg-no-repeat"
+                    className="w-4 h-4 rounded-md border-2 border-gray-300 bg-transparent appearance-none cursor-pointer transition-all checked:border-[#7c3aed] checked:bg-[#7c3aed] focus:ring-2 focus:ring-[#7c3aed]/20 focus:ring-offset-0 checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMuMzMzMyA0TDYgMTEuMzMzM0wyLjY2NjY3IDgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+')] checked:bg-center checked:bg-no-repeat"
                   />
                   <span className="text-sm group-hover:text-accent transition-colors select-none">{location}</span>
                 </label>
@@ -127,9 +102,12 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
             onClick={() => toggleSection('type')}
             className="w-full flex items-center justify-between mb-3 group"
           >
-            <h4 className="text-sm text-muted-foreground uppercase tracking-wide group-hover:text-accent transition-colors">
-              Mekan Türü
-            </h4>
+            <div className="flex items-center gap-2">
+              <Coffee className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors" />
+              <h4 className="text-sm text-muted-foreground uppercase tracking-wide group-hover:text-accent transition-colors">
+                Mekan Türü
+              </h4>
+            </div>
             <ChevronDown 
               className={`w-4 h-4 text-muted-foreground group-hover:text-accent transition-all ${
                 openSections.type ? 'rotate-180' : ''
@@ -148,7 +126,7 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
                 <label key={type} className="flex items-center gap-2.5 cursor-pointer group py-0.5">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 rounded-md border-2 border-gray-300 bg-transparent appearance-none cursor-pointer transition-all checked:border-accent checked:bg-accent focus:ring-2 focus:ring-accent/20 focus:ring-offset-0 checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMuMzMzMyA0TDYgMTEuMzMzM0wyLjY2NjY3IDgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+')] checked:bg-center checked:bg-no-repeat"
+                    className="w-4 h-4 rounded-md border-2 border-gray-300 bg-transparent appearance-none cursor-pointer transition-all checked:border-[#7c3aed] checked:bg-[#7c3aed] focus:ring-2 focus:ring-[#7c3aed]/20 focus:ring-offset-0 checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMuMzMzMyA0TDYgMTEuMzMzM0wyLjY2NjY3IDgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+')] checked:bg-center checked:bg-no-repeat"
                   />
                   <span className="text-sm group-hover:text-accent transition-colors select-none">{type}</span>
                 </label>
@@ -163,9 +141,12 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
             onClick={() => toggleSection('amenities')}
             className="w-full flex items-center justify-between mb-3 group"
           >
-            <h4 className="text-sm text-muted-foreground uppercase tracking-wide group-hover:text-accent transition-colors">
-              İhtiyaçlar & İmkanlar
-            </h4>
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors" />
+              <h4 className="text-sm text-muted-foreground uppercase tracking-wide group-hover:text-accent transition-colors">
+                İhtiyaçlar & İmkanlar
+              </h4>
+            </div>
             <ChevronDown 
               className={`w-4 h-4 text-muted-foreground group-hover:text-accent transition-all ${
                 openSections.amenities ? 'rotate-180' : ''
@@ -183,7 +164,7 @@ export function VenueFilters({ sortBy = 'rating', onSortChange }: VenueFiltersPr
                 <label key={amenity.label} className="flex items-center gap-2.5 cursor-pointer group py-0.5">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 rounded-md border-2 border-gray-300 bg-transparent appearance-none cursor-pointer transition-all checked:border-accent checked:bg-accent focus:ring-2 focus:ring-accent/20 focus:ring-offset-0 checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMuMzMzMyA0TDYgMTEuMzMzM0wyLjY2NjY3IDgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+')] checked:bg-center checked:bg-no-repeat"
+                    className="w-4 h-4 rounded-md border-2 border-gray-300 bg-transparent appearance-none cursor-pointer transition-all checked:border-[#7c3aed] checked:bg-[#7c3aed] focus:ring-2 focus:ring-[#7c3aed]/20 focus:ring-offset-0 checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTMuMzMzMyA0TDYgMTEuMzMzM0wyLjY2NjY3IDgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+')] checked:bg-center checked:bg-no-repeat"
                   />
                   <amenity.icon className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors" />
                   <span className="text-sm group-hover:text-accent transition-colors select-none">{amenity.label}</span>

@@ -1,27 +1,20 @@
-import { ChevronLeft, ChevronRight, Plus, Sparkles, Store, Target, BookOpen, Telescope, BarChart3, ClipboardList, Trophy, Award } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronLeft, ChevronRight, Plus, Sparkles, Store, Megaphone, BookOpen, Telescope, MessageSquare } from 'lucide-react';
 
 const navigationItems = [
   { icon: Sparkles, label: 'Akış', active: true },
+  { icon: MessageSquare, label: 'Başlıklar', active: false },
   { icon: Store, label: 'Mekan Rehberi', active: false },
-  { icon: Target, label: 'İş İlanları', active: false },
+  { icon: Megaphone, label: 'İlanlar', active: false },
   { icon: BookOpen, label: 'Akademik', active: false },
   { icon: Telescope, label: 'Kültürel Keşif', active: false },
-];
-
-const gamificationItems = [
-  { icon: BarChart3, label: 'Leaderboard', active: false },
-  { icon: ClipboardList, label: 'Görevler', active: false },
-  { icon: Trophy, label: 'Başarımlar', active: false },
-  { icon: Award, label: 'Rozetler', active: false },
 ];
 
 export function Navigation({ onCreateClick, isCollapsed, setIsCollapsed, currentPage, onNavigate }: { 
   onCreateClick: () => void;
   isCollapsed: boolean;
   setIsCollapsed: (value: boolean) => void;
-  currentPage: 'feed' | 'venue-list' | 'venue-detail';
-  onNavigate: (page: 'feed' | 'venue-list' | 'venue-detail') => void;
+  currentPage: 'feed' | 'venue-list' | 'venue-detail' | 'topic-list' | 'jobs' | 'academic' | 'cultural' | 'profile' | 'wallet';
+  onNavigate: (page: 'feed' | 'venue-list' | 'venue-detail' | 'topic-list' | 'jobs' | 'academic' | 'cultural' | 'profile' | 'wallet') => void;
 }) {
 
   return (
@@ -69,14 +62,24 @@ export function Navigation({ onCreateClick, isCollapsed, setIsCollapsed, current
       
       <ul className="space-y-1">
         {navigationItems.map((item, index) => {
-          const isActive = (index === 0 && currentPage === 'feed') || (index === 1 && (currentPage === 'venue-list' || currentPage === 'venue-detail'));
+          const isActive = 
+            (index === 0 && currentPage === 'feed') || 
+            (index === 1 && currentPage === 'topic-list') ||
+            (index === 2 && (currentPage === 'venue-list' || currentPage === 'venue-detail')) ||
+            (index === 3 && currentPage === 'jobs') ||
+            (index === 4 && currentPage === 'academic') ||
+            (index === 5 && currentPage === 'cultural');
           const Icon = item.icon;
           return (
             <li key={item.label}>
               <button
                 onClick={() => {
                   if (index === 0) onNavigate('feed');
-                  if (index === 1) onNavigate('venue-list');
+                  if (index === 1) onNavigate('topic-list');
+                  if (index === 2) onNavigate('venue-list');
+                  if (index === 3) onNavigate('jobs');
+                  if (index === 4) onNavigate('academic');
+                  if (index === 5) onNavigate('cultural');
                 }}
                 className={`flex items-center gap-3 rounded-lg transition-all duration-300 ${ 
                   isActive
@@ -85,8 +88,8 @@ export function Navigation({ onCreateClick, isCollapsed, setIsCollapsed, current
                 } ${isCollapsed ? 'justify-center w-12 h-12' : 'w-full px-3 py-2.5'}`}
                 title={isCollapsed ? item.label : ''}
               >
-                <Icon className="w-5 h-5" />
-                {!isCollapsed && <span className={isActive ? 'font-semibold' : ''}>{item.label}</span>}
+                <Icon className={`w-5 h-5 ${isActive ? 'text-accent' : ''}`} />
+                {!isCollapsed && <span className={isActive ? 'font-semibold text-accent' : 'text-gray-700'}>{item.label}</span>}
               </button>
             </li>
           );

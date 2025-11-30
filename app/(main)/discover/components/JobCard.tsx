@@ -1,4 +1,4 @@
-import { MapPin, DollarSign, Calendar, Bookmark, Share2, Briefcase, Home, BookOpen } from 'lucide-react';
+import { MapPin, DollarSign, Calendar, Bookmark, Share2, Briefcase, Home, BookOpen, Heart, MessageCircle, ArrowUp, ArrowDown, Package } from 'lucide-react';
 import { useState } from 'react';
 
 interface JobCardProps {
@@ -12,7 +12,7 @@ interface JobCardProps {
       color: string;
     };
   };
-  category: 'job' | 'roommate' | 'tutor';
+  category: 'job' | 'roommate' | 'tutor' | 'internship' | 'parttime' | 'freelance' | 'sale';
   title: string;
   details: {
     location: string;
@@ -32,6 +32,31 @@ export function JobCard({
   timestamp,
 }: JobCardProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(28);
+  const [commentCount] = useState(5);
+  const [voteState, setVoteState] = useState<'up' | 'down' | null>(null);
+  const [upvoteCount, setUpvoteCount] = useState(42);
+
+  const handleUpvote = () => {
+    if (voteState === 'up') {
+      setVoteState(null);
+      setUpvoteCount(upvoteCount - 1);
+    } else {
+      setVoteState('up');
+      setUpvoteCount(voteState === 'down' ? upvoteCount + 2 : upvoteCount + 1);
+    }
+  };
+
+  const handleDownvote = () => {
+    if (voteState === 'down') {
+      setVoteState(null);
+      setUpvoteCount(upvoteCount + 1);
+    } else {
+      setVoteState('down');
+      setUpvoteCount(voteState === 'up' ? upvoteCount - 2 : upvoteCount - 1);
+    }
+  };
 
   const getCategoryConfig = () => {
     switch (category) {
@@ -54,6 +79,34 @@ export function JobCard({
           icon: <BookOpen className="w-4 h-4" />,
           label: 'Özel Ders',
           color: 'bg-purple-50 text-purple-700 border-purple-200',
+          buttonText: 'İletişime Geç',
+        };
+      case 'internship':
+        return {
+          icon: <Briefcase className="w-4 h-4" />,
+          label: 'Staj',
+          color: 'bg-blue-50 text-blue-700 border-blue-200',
+          buttonText: 'Başvur',
+        };
+      case 'parttime':
+        return {
+          icon: <Briefcase className="w-4 h-4" />,
+          label: 'Part-time İş',
+          color: 'bg-blue-50 text-blue-700 border-blue-200',
+          buttonText: 'Başvur',
+        };
+      case 'freelance':
+        return {
+          icon: <Briefcase className="w-4 h-4" />,
+          label: 'Freelance',
+          color: 'bg-blue-50 text-blue-700 border-blue-200',
+          buttonText: 'Başvur',
+        };
+      case 'sale':
+        return {
+          icon: <Package className="w-4 h-4" />,
+          label: 'Satış',
+          color: 'bg-orange-50 text-orange-700 border-orange-200',
           buttonText: 'İletişime Geç',
         };
     }
@@ -120,7 +173,7 @@ export function JobCard({
         <h3 className="text-lg mb-3">{title}</h3>
 
         {/* Details Grid */}
-        <div className="grid grid-cols-1 gap-2 mb-3 bg-secondary rounded-lg p-3">
+        <div className="grid grid-cols-1 gap-2 mb-3 bg-gray-50 rounded-lg p-3">
           {/* Category Badge */}
           <div className="flex items-center gap-2 text-sm pb-2 border-b border-border/30">
             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs ${config.color}`}>
@@ -151,7 +204,58 @@ export function JobCard({
         </p>
 
         {/* Interaction Bar */}
-        <div className="pt-3 border-t border-border/50">
+        <div className="flex items-center gap-4 pt-3 border-t border-border/50">
+          {/* Upvote/Downvote */}
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={handleUpvote}
+              className={`p-1.5 rounded-md transition-all ${
+                voteState === 'up' 
+                  ? 'text-green-600 bg-green-50' 
+                  : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
+              }`}
+            >
+              <ArrowUp className={`w-4 h-4 transition-all ${
+                voteState === 'up' ? 'fill-green-600' : ''
+              }`} />
+            </button>
+            <span className={`text-sm font-medium min-w-[1.5rem] text-center ${
+              voteState === 'up' ? 'text-green-600' : voteState === 'down' ? 'text-red-600' : 'text-gray-700'
+            }`}>{upvoteCount}</span>
+            <button 
+              onClick={handleDownvote}
+              className={`p-1.5 rounded-md transition-all ${
+                voteState === 'down' 
+                  ? 'text-red-600 bg-red-50' 
+                  : 'text-gray-400 hover:text-red-600 hover:bg-red-50'
+              }`}
+            >
+              <ArrowDown className={`w-4 h-4 transition-all ${
+                voteState === 'down' ? 'fill-red-600' : ''
+              }`} />
+            </button>
+          </div>
+
+          <button 
+            onClick={() => {
+              setIsLiked(!isLiked);
+              setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+            }}
+            className={`flex items-center gap-2 transition-all ${
+              isLiked ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
+            }`}
+          >
+            <Heart className={`w-4 h-4 ${isLiked ? 'fill-red-500' : ''}`} />
+            <span className="text-sm">{likeCount}</span>
+          </button>
+
+          <button className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-all">
+            <MessageCircle className="w-4 h-4" />
+            <span className="text-sm">{commentCount}</span>
+          </button>
+
+          <div className="flex-1"></div>
+
           <button className="px-6 py-2 bg-accent hover:bg-accent/90 text-white rounded-lg transition-colors text-sm">
             {config.buttonText}
           </button>
