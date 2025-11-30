@@ -5,14 +5,15 @@ import { RoleBadge } from "@/components/role";
 import { CoinBalance } from "@/components/coin";
 import { ROLES } from "@/constants";
 import { UserRole } from "@/types";
+import { leaderboard } from "@/data/mock";
 
-const mockLeaderboard = [
-  { rank: 1, username: "konya_bilgesi_01", role: "konya_bilgesi" as UserRole, coin: 65000 },
-  { rank: 2, username: "kasif_ahmet", role: "kasif_meraklisi" as UserRole, coin: 42000 },
-  { rank: 3, username: "gezgin_fatma", role: "kasif_meraklisi" as UserRole, coin: 38500 },
-  { rank: 4, username: "gezgin_ali", role: "gezgin" as UserRole, coin: 8750 },
-  { rank: 5, username: "seyyah_zeynep", role: "seyyah" as UserRole, coin: 2100 },
-];
+// Weekly leaderboard verilerini kullan
+const leaderboardData = leaderboard.weekly.map(user => ({
+  rank: user.rank,
+  username: user.username,
+  role: user.role as UserRole,
+  coin: user.coins
+}));
 
 export default function LeaderboardPage() {
   return (
@@ -23,7 +24,7 @@ export default function LeaderboardPage() {
 
       <Card>
         <CardContent className="divide-y divide-zinc-100 p-0 dark:divide-zinc-800">
-          {mockLeaderboard.map((user) => {
+          {leaderboardData.map((user) => {
             const roleInfo = ROLES[user.role];
             return (
               <div key={user.rank} className="flex items-center gap-4 p-4">
@@ -35,7 +36,7 @@ export default function LeaderboardPage() {
                 }`}>
                   {user.rank}
                 </span>
-                <Avatar fallback={user.username.slice(0, 2).toUpperCase()} roleColor={roleInfo.color} size="md" />
+                <Avatar fallback={user.username.slice(0, 2).toUpperCase()} roleColor={roleInfo?.color || '#888'} size="md" />
                 <div className="flex-1">
                   <p className="font-semibold text-zinc-900 dark:text-white">@{user.username}</p>
                   <RoleBadge role={user.role} size="sm" />

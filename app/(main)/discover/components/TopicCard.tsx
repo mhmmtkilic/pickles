@@ -1,8 +1,8 @@
 import { MessageCircle, ArrowUp, ArrowDown, Eye, Bookmark, Share2 } from 'lucide-react';
 import { useState } from 'react';
 
-interface TopicCardProps {
-  id: number;
+export interface TopicCardProps {
+  id: string | number;
   title: string;
   description?: string;
   author: {

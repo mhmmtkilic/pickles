@@ -1,7 +1,9 @@
 import { ArrowUp, ArrowDown, Heart, MessageCircle, Bookmark, MoreHorizontal, Share2, MapPin, BookOpen } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PostCardProps {
+  id: string | number;
   author: {
     name: string;
     username: string;
@@ -21,9 +23,11 @@ interface PostCardProps {
     icon: 'venue' | 'course';
     text: string;
   };
+  onClick?: () => void;
 }
 
-export function PostCard({ author, title, content, timestamp, upvotes, helpfulCount, categories, topicLink }: PostCardProps) {
+export function PostCard({ id, author, title, content, timestamp, upvotes, helpfulCount, categories, topicLink, onClick }: PostCardProps) {
+  const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(42);
   const [commentCount] = useState(8);
@@ -65,8 +69,23 @@ export function PostCard({ author, title, content, timestamp, upvotes, helpfulCo
     setIsSaved(!isSaved);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Buton tıklamalarında yönlendirme yapma
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    if (onClick) {
+      onClick();
+    } else {
+      router.push(`/post/${id}`);
+    }
+  };
+
   return (
-    <div className="bg-white border border-border rounded-lg mb-4 hover:border-muted transition-colors overflow-hidden cursor-pointer">
+    <div 
+      className="bg-white border border-border rounded-lg mb-4 hover:border-muted transition-colors overflow-hidden cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="p-5">
           {/* Header: User Info + Actions */}
           <div className="flex items-start justify-between mb-3">

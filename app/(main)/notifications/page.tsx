@@ -3,49 +3,22 @@
 import { Card, CardHeader, CardTitle, CardContent, Button } from "@/components/ui";
 import { NotificationItem } from "@/components/notification";
 import { Notification } from "@/types";
+import { notifications } from "@/data/mock";
 
-const mockNotifications: Notification[] = [
-  {
-    id: "1",
-    userId: "1",
-    type: "coin_earned",
-    title: "+10 GençCoin Kazandın!",
-    message: "Wiki düzenlemen onaylandı.",
-    isRead: false,
-    link: "/topic/selcuk-hukuk",
-    createdAt: new Date(),
-  },
-  {
-    id: "2",
-    userId: "1",
-    type: "entry_liked",
-    title: "Yorumun Beğenildi",
-    message: "@seyyah_zeynep yorumunu beğendi.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 3600000),
-  },
-  {
-    id: "3",
-    userId: "1",
-    type: "role_upgrade",
-    title: "Tebrikler! 🎉",
-    message: "Seyyah rolüne terfi ettin!",
-    isRead: true,
-    createdAt: new Date(Date.now() - 86400000),
-  },
-  {
-    id: "4",
-    userId: "1",
-    type: "badge_earned",
-    title: "Yeni Rozet Kazandın! 🏆",
-    message: "'100 Beğeni' rozetini kazandın.",
-    isRead: true,
-    createdAt: new Date(Date.now() - 172800000),
-  },
-];
+// Notification verilerini hazırla
+const notificationData: Notification[] = notifications.slice(0, 5).map(ntf => ({
+  id: ntf.id,
+  userId: ntf.userId,
+  type: ntf.type as Notification["type"],
+  title: ntf.title.charAt(0).toUpperCase() + ntf.title.slice(1),
+  message: ntf.message.charAt(0).toUpperCase() + ntf.message.slice(1),
+  isRead: ntf.isRead,
+  link: ntf.link,
+  createdAt: new Date(ntf.createdAt),
+}));
 
 export default function NotificationsPage() {
-  const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
+  const unreadCount = notificationData.filter((n) => !n.isRead).length;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
@@ -65,7 +38,7 @@ export default function NotificationsPage() {
 
       <Card>
         <CardContent className="divide-y divide-zinc-100 p-0 dark:divide-zinc-800">
-          {mockNotifications.map((notification) => (
+          {notificationData.map((notification) => (
             <NotificationItem key={notification.id} notification={notification} />
           ))}
         </CardContent>

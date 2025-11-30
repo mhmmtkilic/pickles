@@ -1,9 +1,10 @@
-import { MapPin, Star, CheckCircle, Wifi, Plug, Coffee, BookOpen, Moon, DollarSign, Zap, Heart } from 'lucide-react';
+import { MapPin, Star, CheckCircle, Wifi, Plug, Coffee, BookOpen, Moon, DollarSign, Zap, Heart, VolumeX, Users, Clock, Gift, type LucideIcon } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { venues } from '@/data/mock';
 
 interface Venue {
-  id: number;
+  id: string;
   name: string;
   verified: boolean;
   category: string;
@@ -12,92 +13,58 @@ interface Venue {
   address: string;
   rating: number;
   reviewCount: number;
-  amenities: ('WiFi' | 'Priz' | 'Kahve')[];
-  priceLevel: '₺' | '₺₺' | '₺₺₺';
+  amenities: string[];
+  priceLevel: string;
 }
 
-const mockVenues: Venue[] = [
-  {
-    id: 1,
-    name: 'Kütüphane Kafe',
-    verified: true,
-    category: 'Kafe & Çalışma',
-    description: 'Vize haftaları sabahlamak için ideal, priz sorunu yok ama kahveleri biraz pahalı. Sessiz ortam isteyenler için birebir.',
-    image: 'https://images.unsplash.com/photo-1684006997322-6a5128f44816?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjYWZlJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY0MTQ0ODc3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    address: 'Bosna Hersek Mah, Selçuk Üni. Karşısı',
-    rating: 4.5,
-    reviewCount: 127,
-    amenities: ['WiFi', 'Priz'],
-    priceLevel: '₺₺',
-  },
-  {
-    id: 2,
-    name: 'Zafer Çalışma Kafesi',
-    verified: true,
-    category: 'Çalışma Kafesi',
-    description: 'Ödev yapmak için mükemmel, internetin hızı çok iyi. Tek sorun akşam 10\'da kapanıyor, final döneminde sıkıntı oluyor.',
-    image: 'https://images.unsplash.com/photo-1716703370150-419e76c00de6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwd29ya3NwYWNlfGVufDF8fHx8MTc2NDIwNTM4N3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    address: 'Zafer Mah, Kent Meydanı Yanı',
-    rating: 4.8,
-    reviewCount: 203,
-    amenities: ['WiFi', 'Priz'],
-    priceLevel: '₺',
-  },
-  {
-    id: 3,
-    name: 'Kampüs Kütüphanesi',
-    verified: false,
-    category: 'Kütüphane',
-    description: 'Gece 2\'ye kadar açık, sessiz ve ücretsiz. Ama yoğun zamanlarda yer bulamıyorsun, erkenden gitmen lazım.',
-    image: 'https://images.unsplash.com/photo-1546953304-5d96f43c2e94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaWJyYXJ5JTIwc3R1ZHl8ZW58MXx8fHwxNzY0MjE1NjAxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    address: 'Selçuk Üniversitesi Kampüs İçi',
-    rating: 4.3,
-    reviewCount: 89,
-    amenities: ['WiFi', 'Priz'],
-    priceLevel: '₺',
-  },
-  {
-    id: 4,
-    name: 'Code Hub',
-    verified: true,
-    category: 'Co-working',
-    description: 'Yazılım öğrencileri için harika, toplantı odaları var. Aylık üyelik biraz tuzlu ama günlük gelme opsiyonu da mevcut.',
-    image: 'https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3dvcmtpbmclMjBzcGFjZXxlbnwxfHx8fDE3NjQxNzc0OTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    address: 'Selçuklu, Kulesite AVM Yanı',
-    rating: 4.7,
-    reviewCount: 156,
-    amenities: ['WiFi', 'Priz'],
-    priceLevel: '₺₺₺',
-  },
-  {
-    id: 5,
-    name: 'Çınaraltı Restoran',
-    verified: true,
-    category: 'Restoran',
-    description: 'Öğrenci menüsü 50 TL, porsiyon dolu dolu. Öğle arası çok kalabalık oluyor, 13:00\'ten sonra gitmek daha mantıklı.',
-    image: 'https://images.unsplash.com/photo-1667388969250-1c7220bf3f37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXN0YXVyYW50JTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY0MjEzMDg2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    address: 'Bosna Hersek Mah, Eski Sanayi',
-    rating: 4.4,
-    reviewCount: 178,
-    amenities: ['WiFi'],
-    priceLevel: '₺',
-  },
-  {
-    id: 6,
-    name: 'Gece Vakti Kafe',
-    verified: true,
-    category: 'Kafe',
-    description: '24 saat açık, final haftası kurtarıcı. Gece 3\'te bile çalışan öğrenciyle dolu. Kahveleri güzel ama fiyatlar standart üstü.',
-    image: 'https://images.unsplash.com/photo-1684006997322-6a5128f44816?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjYWZlJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY0MTQ0ODc3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    address: 'Zafer Mah, Alaaddin Bulvarı',
-    rating: 4.6,
-    reviewCount: 234,
-    amenities: ['WiFi', 'Priz'],
-    priceLevel: '₺₺',
-  },
-];
+// Fiyat seviyesi dönüşümü
+const priceLevelMap: Record<string, string> = {
+  uygun: '₺',
+  ucretsiz: '₺',
+  orta: '₺₺',
+  pahali: '₺₺₺'
+};
 
-const getAmenityIcon = (amenity: 'WiFi' | 'Priz' | 'Kahve') => {
+// Amenity dönüşümü
+const amenityMap: Record<string, string> = {
+  wifi: 'WiFi',
+  priz: 'Priz',
+  kahve: 'Kahve',
+  sessiz: 'Sessiz',
+  toplantı: 'Toplantı',
+  toplanti: 'Toplantı',
+  '24saat': '24 Saat',
+  ücretsiz: 'Ücretsiz',
+  ucretsiz: 'Ücretsiz'
+};
+
+// Kategori dönüşümü
+const categoryMap: Record<string, string> = {
+  kafe: 'Kafe',
+  kutuphane: 'Kütüphane',
+  'calisma kafesi': 'Çalışma Kafesi',
+  'coworking': 'Co-working',
+  restoran: 'Restoran'
+};
+
+// Venue verilerini hazırla
+const prepareVenues = (): Venue[] => {
+  return venues.map(venue => ({
+    id: venue.id,
+    name: venue.name.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    verified: venue.verified,
+    category: categoryMap[venue.category] || venue.category,
+    description: venue.description,
+    image: venue.image,
+    address: venue.address,
+    rating: venue.rating,
+    reviewCount: venue.reviewCount,
+    amenities: venue.amenities.map((a: string) => amenityMap[a] || a).filter(Boolean) as string[],
+    priceLevel: priceLevelMap[venue.priceLevel] || '₺₺'
+  }));
+};
+
+const getAmenityIcon = (amenity: string): LucideIcon | null => {
   switch (amenity) {
     case 'WiFi':
       return Wifi;
@@ -105,17 +72,30 @@ const getAmenityIcon = (amenity: 'WiFi' | 'Priz' | 'Kahve') => {
       return Plug;
     case 'Kahve':
       return Coffee;
+    case 'Sessiz':
+      return VolumeX;
+    case 'Toplantı':
+      return Users;
+    case '24 Saat':
+      return Clock;
+    case 'Ücretsiz':
+      return Gift;
+    default:
+      return null;
   }
 };
 
 export function VenueList({ onVenueClick, sortBy, onSortChange }: { 
-  onVenueClick: (venueId: number) => void;
+  onVenueClick: (venueId: number | string) => void;
   sortBy: 'all' | 'rating' | 'newest' | 'nearest';
   onSortChange: (sort: 'all' | 'rating' | 'newest' | 'nearest') => void;
 }) {
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  
+  // Mock verileri hazırla
+  const venueList = useMemo(() => prepareVenues(), []);
 
-  const toggleFavorite = (venueId: number, e: React.MouseEvent) => {
+  const toggleFavorite = (venueId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setFavorites(prev => {
       const newFavorites = new Set(prev);
@@ -129,23 +109,21 @@ export function VenueList({ onVenueClick, sortBy, onSortChange }: {
   };
 
   // Sort venues based on selected filter
-  const getSortedVenues = () => {
-    const venuesCopy = [...mockVenues];
+  const sortedVenues = useMemo(() => {
+    const venuesCopy = [...venueList];
     
     switch (sortBy) {
       case 'rating':
         return venuesCopy.sort((a, b) => b.rating - a.rating);
       case 'newest':
-        return venuesCopy.sort((a, b) => b.id - a.id); // Assuming higher ID = newer
+        return venuesCopy.reverse();
       case 'nearest':
-        return venuesCopy.sort((a, b) => a.id - b.id); // Mock: just reverse order
+        return venuesCopy;
       case 'all':
       default:
         return venuesCopy;
     }
-  };
-
-  const sortedVenues = getSortedVenues();
+  }, [venueList, sortBy]);
 
   return (
     <div className="flex-1 min-w-0">
@@ -253,6 +231,7 @@ export function VenueList({ onVenueClick, sortBy, onSortChange }: {
               <div className="flex items-center gap-2 pt-3 border-t border-border">
                 {venue.amenities.map((amenity, index) => {
                   const Icon = getAmenityIcon(amenity);
+                  if (!Icon) return null;
                   return (
                     <div
                       key={index}
